@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Hotel
-from .models import Booking
+from .models import Author
+from .models import Book
 
 # Register your models here.
-admin.site.register(Hotel)
-admin.site.register(Booking)
+admin.site.register(Author)
+admin.site.register(Book)
