@@ -43,8 +43,8 @@ class CreateUserSerializer(serializers.ModelSerializer) :
         username = validated_data['username']
         password = validated_data['password']
 
-        first_name = validated_data['username']
-        last_name = validated_data['username']
+        first_name = validated_data['first_name']
+        last_name = validated_data['last_name']
 
         new_user = User(username = username, first_name = first_name, last_name = last_name)
         new_user.set_password(password)
