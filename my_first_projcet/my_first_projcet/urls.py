@@ -18,13 +18,20 @@ from django.urls import path
 from hotels.views import *
 from hotels.models import *
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('authors/list', AuthorsList.as_view()),
-    path('books/list', BooksList.as_view()),
-    path('authors/<int:author_id>', AuthorDetails.as_view()),
+    path('authors/list/', AuthorsList.as_view()),
+    path('books/list/', BooksList.as_view()),
+    path('authors/<int:author_id>/', AuthorDetails.as_view()),
     path('authors/', CreateAuthor.as_view()),
     path('books/', CreateBook.as_view()),
-    path('authors/update/<int:author_id>', UpdateAuthor.as_view()),
-    path('books/remove/<int:book_id>', DeleteBook.as_view())
+    path('authors/update/<int:author_id>/', UpdateAuthor.as_view()),
+    path('books/remove/<int:book_id>/', DeleteBook.as_view()),
+    path('register/', CreateUser.as_view()),
+    path('login/', TokenObtainPairView.as_view())
 ]

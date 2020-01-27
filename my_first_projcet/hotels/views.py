@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from .models import Author, Book
-from .serializers import AuthorsListSerializer, BooksListSerializer, AuthorDetailsSerializer, CreateAuthorSerializer, CreateBookSerializer, UpdateAuthorSerializer
+from .serializers import AuthorsListSerializer, BooksListSerializer, AuthorDetailsSerializer, CreateAuthorSerializer, CreateBookSerializer, UpdateAuthorSerializer, CreateUserSerializer
 
 # Create your views here.
 class AuthorsList(ListAPIView) :
@@ -34,3 +34,6 @@ class DeleteBook(DestroyAPIView) :
     queryset = Book.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "book_id"
+
+class CreateUser(CreateAPIView) :
+    serializer_class = CreateUserSerializer
