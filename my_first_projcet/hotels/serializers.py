@@ -37,7 +37,7 @@ class CreateAuthorSerializer(serializers.ModelSerializer):
 class CreateBookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = "__all__"
+        exclude = ['added_by']
 
 
 class BorrowBookSerializer(serializers.ModelSerializer):

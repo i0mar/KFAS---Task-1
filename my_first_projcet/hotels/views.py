@@ -2,10 +2,11 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from .models import Author, Book, BorrowedBook
 from .serializers import AuthorsListSerializer, BooksListSerializer, AuthorDetailsSerializer, CreateAuthorSerializer, \
-    CreateBookSerializer, UpdateAuthorSerializer, CreateUserSerializer, BorrowBookSerializer, BorrowedBooksListSerializer
+    CreateBookSerializer, UpdateAuthorSerializer, CreateUserSerializer, BorrowBookSerializer, \
+    BorrowedBooksListSerializer
 
-from django.contrib.auth.models import User
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsBorrower, HasAddedBook
 
 
 # Create your views here.
@@ -24,7 +25,7 @@ class BorrowedBooksList(ListAPIView):
     serializer_class = BorrowedBooksListSerializer
 
     def get_queryset(self):
-        return BorrowedBook.objects.filter(user = self.request.user)
+        return BorrowedBook.objects.filter(user=self.request.user)
 
 
 class AuthorDetails(RetrieveAPIView):
@@ -40,6 +41,10 @@ class CreateAuthor(CreateAPIView):
 
 class CreateBook(CreateAPIView):
     serializer_class = CreateBookSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(added_by=self.request.user)
 
 
 class UpdateAuthor(RetrieveUpdateAPIView):
@@ -53,6 +58,7 @@ class DeleteBook(DestroyAPIView):
     queryset = Book.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "book_id"
+    permission_classes = [HasAddedBook]
 
 
 class CreateUser(CreateAPIView):
@@ -67,13 +73,12 @@ class BorrowBook(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        user = self.request.user
         book_id = self.kwargs.get(self.lookup_url_kwarg)
-        user.save()
-        serializer.save(user = user, book_id = book_id)
+        serializer.save(user=self.request.user, book_id=book_id)
 
 
 class UnBorrowBook(DestroyAPIView):
     queryset = BorrowedBook.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "book_id"
+    permission_classes = [IsBorrower]
