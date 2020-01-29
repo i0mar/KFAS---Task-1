@@ -33,5 +33,8 @@ urlpatterns = [
     path('authors/update/<int:author_id>/', UpdateAuthor.as_view()),
     path('books/remove/<int:book_id>/', DeleteBook.as_view()),
     path('register/', CreateUser.as_view()),
-    path('login/', TokenObtainPairView.as_view())
+    path('login/', TokenObtainPairView.as_view()),
+    path('books/borrow/<int:book_id>/', BorrowBook.as_view()),
+    path('books/unborrow/<int:book_id>/', UnBorrowBook.as_view()),
+    path('books/borrowed/', BorrowedBooksList.as_view())
 ]
